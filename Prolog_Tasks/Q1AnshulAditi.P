@@ -1,0 +1,132 @@
+%Defining own member function
+member2(Elem, [Elem|_]).
+member2(Elem, [_|Rest]):-
+    member2(Elem,Rest).
+
+
+% Let's see how can we cross the river.
+% 1) 2 M from left to right
+crossRiver([CL,ML,left,CR,MR],[CL,ML2,right,CR,MR2]):-
+    MR2 is MR+2,
+	ML2 is ML-2,
+	canMove(CL,ML2,CR,MR2).
+
+% 2) 2 C from left to right
+crossRiver([CL,ML,left,CR,MR],[CL2,ML,right,CR2,MR]):-
+    CR2 is CR+2,
+	CL2 is CL-2,
+	canMove(CL2,ML,CR2,MR).
+
+% 3) 1 M & 1 C left to right
+crossRiver([CL,ML,left,CR,MR],[CL2,ML2,right,CR2,MR2]):-
+    CR2 is CR+1,
+	CL2 is CL-1,
+	MR2 is MR+1,
+	ML2 is ML-1,
+	canMove(CL2,ML2,CR2,MR2).
+
+% 4) 1 M left to right.
+crossRiver([CL,ML,left,CR,MR],[CL,ML2,right,CR,MR2]):-
+    MR2 is MR+1,
+	ML2 is ML-1,
+	canMove(CL,ML2,CR,MR2).
+
+% 5) 1 C left to right.
+crossRiver([CL,ML,left,CR,MR],[CL2,ML,right,CR2,MR]):-
+	CR2 is CR+1,
+	CL2 is CL-1,
+	canMove(CL2,ML,CR2,MR).
+
+% Now all possible cross moves from Right to left.
+% 1) 2 M cross right to left.
+crossRiver([CL,ML,right,CR,MR],[CL,ML2,left,CR,MR2]):-
+    MR2 is MR-2,
+	ML2 is ML+2,
+	canMove(CL,ML2,CR,MR2).
+
+% 2) 2 C right to left.
+crossRiver([CL,ML,right,CR,MR],[CL2,ML,left,CR2,MR]):-
+	CR2 is CR-2,
+	CL2 is CL+2,
+	canMove(CL2,ML,CR2,MR).
+
+% 3) 1 M & 1 C right to left.
+crossRiver([CL,ML,right,CR,MR],[CL2,ML2,left,CR2,MR2]):-
+    CR2 is CR-1,
+	CL2 is CL+1,
+	MR2 is MR-1,
+	ML2 is ML+1,
+	canMove(CL2,ML2,CR2,MR2).
+
+% 4) 1 M right to left.
+crossRiver([CL,ML,right,CR,MR],[CL,ML2,left,CR,MR2]):-
+    MR2 is MR-1,
+	ML2 is ML+1,
+	canMove(CL,ML2,CR,MR2).
+
+% 5) 1 C right to left. 
+crossRiver([CL,ML,right,CR,MR],[CL2,ML,left,CR2,MR]):-
+    CR2 is CR-1,
+	CL2 is CL+1,
+	canMove(CL2,ML,CR2,MR).
+
+%Check if the move is correct?
+canMove(CL,ML,CR,MR) :-
+	ML>=0, CL>=0, MR>=0, CR>=0,
+	(ML>=CL ; ML=0),
+	(MR>=CR ; MR=0).
+
+% Recursive call to solve the problem
+findWay(P,Q,Explored,MovesList) :- 
+   crossRiver(P,R), 
+   not(member2(R,Explored)),
+   findWay(R,Q,[R|Explored],[ [R,P] | MovesList ]).
+
+% Solution found
+findWay(K,K,_,MovesList):- 
+	beginPrinting(MovesList).
+
+% Printing
+beginPrinting([]) :- nl. 
+beginPrinting([[A,B]|MovesList]) :- 
+	beginPrinting(MovesList), 
+   	boat_move(B), write('Before move -> '), position(B), nl, write('After move -> '), position(A),nl.
+
+%Calls the find method to start execution
+startMove(P,Q) :-
+    write(P,[P|_]),
+    begin(P,Q).
+
+%Prints the movement, ie; the third element of the list
+print_list([]).
+print_list([A,B,C,D,E]):-
+    write(C).
+
+%Determines the movement of the boat.
+boat_move([]).
+boat_move([_,_,B|T]):-
+    (   B = left ->  
+    write('Boat moves left to right'), nl
+    ;   
+    write('Boat moves right to left'), nl
+    ).
+
+position([]).
+position([A,B,C,D,E]):-
+    write('At Left = '), write(A), write('C & '), write(B), write('M ------- '),
+    write('At Right = '), write(D), write('C & '), write(E), write('M ').
+    
+%Query find--
+% Find the solution for the missionaries and cannibals problem
+begin(P,Q) :- 
+   findWay(P,Q,P,_).
+   
+%%%%%%%%%%%%%%%%%%%
+%%%% Reference-
+%%%% Einstein Riddle - http://en.wikipedia.org/wiki/Zebra_Puzzle
+%%%% For if else logic - http://homepages.inf.ed.ac.uk/pbrna/prologbook/node192.html
+%%%% Example puzzle - http://swish.swi-prolog.org/example/houses_puzzle.pl
+%%%% LogicBase - https://ideone.com/zFFOGD
+%%%% Prolog Intro - https://en.wikipedia.org/wiki/Prolog
+%%%% member definition - http://www.swi-prolog.org/pldoc/man?predicate=member/2
+%%%%%%%%%%%%%%%%%%%

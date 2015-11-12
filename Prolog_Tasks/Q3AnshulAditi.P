@@ -1,0 +1,50 @@
+%The main method to call is whoIswho(OwnerOfZebra,DrinkerOfWater)
+whoIswho(D, Z) :-
+    descriptionOfHouses(D, Z).
+   
+%Append/3 is re-defined as 
+myAppend([],LIST,LIST).
+myAppend([HEAD|TAIL],LIST2,[HEAD|LIST3]) :- myAppend(TAIL,LIST2,LIST3).
+
+%Member function is defined here
+myMember(HEAD,[HEAD|_]).
+myMember(HEAD,[_|TAIL]) :- myMember(HEAD,TAIL).
+
+descriptionOfHouses(Drinker, ZebraOwner) :-
+	All5House = [_,_,_,_,_],						%From problem statement, there are 5 houses
+	myMember(aHouse(_,_,_,water,_), All5House),		% Not directly given but someone drinks water too.
+	myMember(aHouse(_,zebra,_,_,_), All5House),		% Not directly given but someone owns zebra too.
+    myMember(aHouse(english,_,_,_,red), All5House),                         		 % From line 1 in Question 
+	myMember(aHouse(spanish,dog,_,_,_), All5House),                         		 % From line 1 in Question 
+	All5House = [aHouse(norwegian,_,_,_,_)|_],                            		     % From line 1 in Question 
+    myMember(aHouse(_,_,kool,_,yellow), All5House),                        			 % From line 1 in Question 
+    adjacentTo(aHouse(_,_,chesterfield,_,_), aHouse(_,fox,_,_,_), All5House),        % From line 1 in Question 
+    adjacentTo(aHouse(norwegian,_,_,_,_), aHouse(_,_,_,_,blue), All5House),          % From line 1 in Question 
+    myMember(aHouse(_,snail,goldSmoker,_,_), All5House),                       		 % From line 1 in Question 
+    myMember(aHouse(_,_,lucky,orange,_), All5House),                         		 % From line 1 in Question 
+    myMember(aHouse(ukrainian,_,_,tea,_), All5House),                                % From line 1 in Question 
+    myMember(aHouse(japanese,_,parliaments,_,_), All5House),                         % From line 1 in Question 
+    adjacentTo(aHouse(_,horse,_,_,_), aHouse(_,_,kool,_,_), All5House),              % From line 1 in Question 
+    myMember(aHouse(_,_,_,coffee,green), All5House),                        		 % From line 1 in Question 
+    adjacentTo(aHouse(_,_,_,_,green), aHouse(_,_,_,_,ivory), All5House),             % From line 1 in Question 
+    All5House = [_,_,aHouse(_,_,_,milk,_),_,_],                           			 % From line 1 in Question 
+	
+	%In place of Drinker, we will get back the nationality of the person who drinks water
+    myMember(aHouse(Drinker,_,_,water,_), All5House),
+	%In place of ZebraOwner, we will get back the nationality of the person who owns Zebra
+    myMember(aHouse(ZebraOwner,zebra,_,_,_), All5House).
+
+adjacentTo(A, B, Ls) :- 
+    myAppend(_, [A,B|_], Ls).
+adjacentTo(A, B, Ls) :- 
+    myAppend(_, [B,A|_], Ls).
+
+
+
+%%%%%%%%% References
+%%% http://cs.union.edu/~striegnk/learn-prolog-now/html/node47.html
+%%% http://en.wikipedia.org/wiki/Zebra_Puzzle
+%%% http://cs.union.edu/~striegnk/learn-prolog-now/html/node34.html
+%%% http://swish.swi-prolog.org/example/houses_puzzle.pl
+%%% https://www.cpp.edu/~jrfisher/www/prolog_tutorial/2_7.html
+%%%%%%%%%%
