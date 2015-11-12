@@ -207,7 +207,6 @@ if __name__ == '__main__':
 ### https://en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF
 ### https://docs.python.org/2/library/sets.html
 ### https://docs.python.org/2/library/itertools.html
-### Discussed with fellow calss mates Aman Raj and Dhanendra Jain
 ### http://www.dwheeler.com/essays/minisat-user-guide.html
 ### http://minisat.se/MiniSat.html
 ### http://www.msoos.org/2013/09/minisat-in-your-browser/
