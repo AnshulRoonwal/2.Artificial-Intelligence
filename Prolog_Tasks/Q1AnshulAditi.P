@@ -90,7 +90,7 @@ findWay(K,K,_,MovesList):-
 beginPrinting([]) :- nl. 
 beginPrinting([[A,B]|MovesList]) :- 
 	beginPrinting(MovesList), 
-   	boat_move(B), write('Before move -> '), position(B), nl, write('After move -> '), position(A),nl.
+   	boat_move(B), write('Before move->'), position(B), nl, write('After move->'), position(A),nl.
 
 %Calls the find method to start execution
 startMove(P,Q) :-
